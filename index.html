@@ -1,0 +1,244 @@
+<!doctype html>
+<html class="no-js" lang="de">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+
+  <meta name="theme-color" content="#fafafa">
+  <title>Ticket System</title>
+  <script src="js/vendor/modernizr-3.11.2.min.js" defer></script>
+  <script src="js/plugins.js" defer></script>
+  <script src="js/main.js" defer></script>
+  <style>
+    :root {
+      --var-bg-color: #121212;
+      --var-font-family: "Roboto", -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      --var-font-color: #fff;
+      --var-font-hover-color: #9e9e9e;
+      --var-font-size: 1rem;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      background-color: var(--var-bg-color);
+      font-family: var(--var-font-family);
+      color: var(--var-font-color);
+      font-size: var(--var-font-size);
+    }
+
+    .loader {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 100;
+      background-color: var(--var-bg-color);
+    }
+
+    @-webkit-keyframes dyinglight {
+      15% {
+        transform: scale(1.6);
+      }
+
+      50% {
+        transform: rotate(-89deg);
+      }
+
+      100% {
+        transform: rotate(-90deg);
+      }
+    }
+
+    @keyframes dyinglight {
+      15% {
+        transform: scale(1.6);
+      }
+
+      50% {
+        transform: rotate(-89deg);
+      }
+
+      100% {
+        transform: rotate(-90deg);
+      }
+    }
+
+    .dl {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      display: inline-block;
+    }
+
+    .dl__square {
+      display: block;
+      width: 50px;
+      height: 50px;
+      background: #4285F4;
+    }
+
+    .dl__container {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      transform-origin: 50% 50% 0;
+      -webkit-animation: dyinglight 1s ease infinite;
+      animation: dyinglight 1s ease infinite;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
+
+    .dl__corner--top:before,
+    .dl__corner--top:after,
+    .dl__corner--bottom:before,
+    .dl__corner--bottom:after {
+      position: absolute;
+      width: 17px;
+      height: 17px;
+      color: #4285F4;
+      content: "";
+    }
+
+    .dl__corner--top:before {
+      border-left: 1px solid;
+      border-top: 1px solid;
+      top: -6px;
+      left: -6px;
+    }
+
+    .dl__corner--top:after {
+      border-right: 1px solid;
+      border-top: 1px solid;
+      top: -6px;
+      right: -6px;
+    }
+
+    .dl__corner--bottom:before {
+      border-left: 1px solid;
+      border-bottom: 1px solid;
+      bottom: -6px;
+      left: -6px;
+    }
+
+    .dl__corner--bottom:after {
+      border-right: 1px solid;
+      border-bottom: 1px solid;
+      bottom: -6px;
+      right: -6px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="loader" id="myLoader">
+    <div class="dl">
+      <div class="dl__container">
+        <div class="dl__corner--top"></div>
+        <div class="dl__corner--bottom"></div>
+      </div>
+      <div class="dl__square"></div>
+    </div>
+  </div>
+
+  <div id="wrapper">
+    <main class="container">
+      <form id="submitTicketForm">
+        <div class="row">
+          <div class="columns">
+            <h4>Submit a Ticket</h4>
+          </div>
+        </div>
+        <div class="row">
+          <div class="six columns">
+            <label for="inEmail">Your email</label>
+            <input class="u-full-width" type="email" maxlength="100" placeholder="test@mailbox.com" id="inEmail" required>
+          </div>
+          <div class="six columns">
+            <label for="inReasonSelect">Reason for contacting</label>
+            <select class="u-full-width" id="inReasonSelect" required>
+              <option value="" disabled>Select a reason</option>
+              <optgroup label="Valuable Things">
+                <option value="suggestion">Suggestion</option>
+                <option value="bug">Bugs/Erros</option>
+              </optgroup>
+              <optgroup label="Others">
+                <option value="question">Questions</option>
+              </optgroup>
+
+            </select>
+          </div>
+        </div>
+        <div class="textareaWrapper">
+          <label for="inMessage">Message</label>
+          <textarea class="u-full-width" maxlength="250" minlength="20" required placeholder="Hi Admin …" id="inMessage"
+            rows="5"></textarea>
+          <div class="helpertext" id="helperTextMsg"></div>
+        </div>
+        <div class="text-right">
+          <input class="button-primary" type="submit" value="Send">
+        </div>
+      </form>
+    </main>
+  </div>
+
+
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function (event) {
+      console.log("DOM fully loaded and parsed");
+      var contactForm = document.getElementById("submitTicketForm")
+      var emailField = document.getElementById("inEmail")
+      var reasonField = document.getElementById("inReasonSelect")
+      var messageField = document.getElementById("inMessage")
+      var helperTextMsg = document.getElementById("helperTextMsg")
+
+      var loader = {
+        el: document.getElementById("myLoader"),
+        hide: function () {
+          this.el.style.display = "none";
+        },
+        show: function () {
+          this.el.style.display = "block";
+        }
+      };
+
+
+      messageField.addEventListener("input", function () {
+        var maxlength = messageField.getAttribute("maxlength");
+        var currentCount = messageField.value.trim().length
+        helperTextMsg.innerText = currentCount + "/" + maxlength;
+      })
+
+      loader.hide()
+
+      contactForm.addEventListener("submit", function (e) {
+        e.preventDefault()
+        var email = emailField.value.trim();
+        var reason = reasonField.value.trim();
+        var message = messageField.value.trim();
+
+        loader.show()
+        console.log({ email, reason, message })
+        //TODO: Send to server
+      })
+    });
+
+  </script>
+</body>
+
+</html>
